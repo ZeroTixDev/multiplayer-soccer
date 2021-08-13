@@ -28,9 +28,9 @@ function intersectRectCircle(rect, circle) {
    return xCornerDistSq + yCornerDistSq <= maxCornerDistSq;
 }
 
-const knock = 300;
-const accel = 500;
-const friction = 0.97;
+const knock = 50;
+const accel = 600;
+const friction = 0.94;
 function simulatePlayer(player, state, Input, delta) {
    const input = Input === undefined ? player.input : Input;
    player.input = { up: input.up, left: input.left, down: input.down, right: input.right };
@@ -53,19 +53,19 @@ function simulatePlayer(player, state, Input, delta) {
 
    if (player.x + player.radius > state.bound.width + state.bound.x) {
       player.x = state.bound.width + state.bound.x - player.radius;
-      player.xv *= -0.3;
+      player.xv *= -0.6;
    }
    if (player.x - player.radius < state.bound.x) {
       player.x = state.bound.x + player.radius;
-      player.xv *= -0.3;
+      player.xv *= -0.6;
    }
    if (player.y + player.radius > state.bound.y + state.bound.height) {
       player.y = state.bound.y + state.bound.height - player.radius;
-      player.yv *= -0.3;
+      player.yv *= -0.6;
    }
    if (player.y - player.radius < state.bound.y) {
       player.y = state.bound.y + player.radius;
-      player.yv *= -0.3;
+      player.yv *= -0.6;
    }
 
    const distX = player.x - state.ball.x;
@@ -115,10 +115,10 @@ module.exports = function simulate(oldState, inputs) {
             const magnitude = Math.sqrt(distX * distX + distY * distY) || 1;
             const xv = distX / magnitude;
             const yv = distY / magnitude;
-            player1.xv = xv * knock;
-            player1.yv = yv * knock;
-            player2.xv = -xv * knock;
-            player2.yv = -yv * knock;
+            player1.xv += xv * knock;
+            player1.yv += yv * knock;
+            player2.xv += -xv * knock;
+            player2.yv += -yv * knock;
             player1.x = player2.x + (player1.radius + 0.05 + player2.radius) * xv;
             player1.y = player2.y + (player1.radius + 0.05 + player2.radius) * yv;
          }
@@ -131,7 +131,7 @@ module.exports = function simulate(oldState, inputs) {
    state.ball.yv *= Math.pow(0.99, delta * 30);
    for (const goal of Object.values(state.goals)) {
       if (intersectRectCircle(goal, state.ball)) {
-         state.won = true;
+         state.won = goal.team;
          break;
       }
    }

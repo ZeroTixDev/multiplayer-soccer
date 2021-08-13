@@ -533,6 +533,10 @@ input:checked + .slider:before {
    font-size: 1.25rem;
 }
 
+.server-message {
+   color: black;
+}
+
 canvas {
    position: absolute;
    left: 0;

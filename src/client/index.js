@@ -407,10 +407,10 @@ function serverMessage(msg, t) {
       for (const { author, content } of messages) {
          ref.chatMessages.innerHTML += `
          <div class="chat-message">
-         	<span class="author ${author === selfId || author === 'SERVER' ? 'my-message' : ''}">${
+         	<span class="author ${author === 'SERVER' ? 'server-message' : ''} ${author === selfId ? 'my-message' : ''}">${
             author === 'SERVER' ? 'SERVER' : game.players[author].name
          }</span>
-         	<span class="message">${content}</span>
+         	<span class="message ${author === 'SERVER' ? 'server-message' : ''}">${content}</span>
          </div>
          `;
          if (author !== selfId && !playedSound) {

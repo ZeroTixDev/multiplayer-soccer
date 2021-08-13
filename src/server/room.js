@@ -231,7 +231,8 @@ module.exports = class Room {
             this.states[this.tick],
             this.inputs[this.tick] === undefined ? {} : this.inputs[this.tick]
          );
-         if (this.states[this.tick + 1].won === true) {
+         if (this.states[this.tick + 1].won) {
+            const team = this.states[this.tick + 1].won;
             this.update = true;
             this.state = 'chat';
             this.sendPackage['change'] = 'chat';
@@ -239,6 +240,7 @@ module.exports = class Room {
             for (const player of Object.values(this.players)) {
                player.ready = false;
             }
+            this.talk('SERVER', `${team === 'blue' ? 'Red' : 'Blue'} team has won the game!`);
             // const scores = this.states[this.tick + 1].scores;
             // for (const id of Object.keys(scores)) {
             //    const score = scores[id];
