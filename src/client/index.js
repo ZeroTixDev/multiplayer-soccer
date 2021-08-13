@@ -19,6 +19,7 @@ let rooms = null;
 let roomId = null;
 window.chatSound = loadSound('chat.wav');
 window.chatSound.volume = 0.2;
+window.smoothing = 30;
 window.selfId = null;
 window.game = null;
 window.gameState = null;
@@ -34,7 +35,7 @@ window.gameRaf = null;
 window.extraLag = 0;
 
 const pings = [];
-const pingAmount = 5;
+const pingAmount = 10;
 
 window.addEventListener('load', () => {
    handleNetworkRequestsAndText();
@@ -264,6 +265,7 @@ function serverMessage(msg, t) {
          pings.shift();
       }
       pings.push(time() - msg.ping);
+      window.ping = Math.round(pings.reduce((a, b) => a + b) / pings.length);
       ref.pingText.innerText = `${Math.round(pings.reduce((a, b) => a + b) / pings.length)}`;
    }
    if (msg.type === 'my-room-update') {
@@ -369,7 +371,7 @@ function serverMessage(msg, t) {
          'difference/amount of time it took to get to client',
          time() - (utc(msg.startTime).unix() * 1000 + utc(msg.startTime).milliseconds())
       );
-      window.gameState.startTime = time(); //utc(msg.startTime).unix() * 1000 + utc(msg.startTime).milliseconds();
+      window.gameState.startTime = time() - window.ping / 2; //utc(msg.startTime).unix() * 1000 + utc(msg.startTime).milliseconds();
       window.gameState.tick = 0;
       window.gameState.countdownAlpha = 1;
       window.gameState.countdown = COUNTDOWN; // msg countdown refers to the date.now on which server sent

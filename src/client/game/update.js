@@ -35,6 +35,7 @@ module.exports = function Update(game) {
          game.inputs[game.tick] = {};
       }
       game.inputs[game.tick][window.selfId] = copyInput(input);
+      game.renderState.players[selfId].ticksBehind = game.tick - expectedTick;
    }
 
    game.poll().forEach((data) => {
@@ -42,6 +43,7 @@ module.exports = function Update(game) {
          game.inputs[data.tick] = {};
       }
       game.inputs[data.tick][data.id] = { ...game.inputs[data.tick][data.id], ...data.input };
+      game.renderState.players[data.id].ticksBehind = data.tick - expectedTick;
       game.tick = Math.min(game.tick, data.tick);
    });
    game.pendingInputs = [];
@@ -87,24 +89,19 @@ module.exports = function Update(game) {
 
    // // smoothing
 
-   // const realDelta = (window.performance.now() - game.lastTime) / 1000;
-   // game.lastTime = window.performance.now();
+   const realDelta = (window.performance.now() - game.lastTime) / 1000;
+   game.lastTime = window.performance.now();
 
-   // const lerpTime = Math.min(realDelta * SMOOTHING_RATE, 1);
-   // game.renderState.ball.x = lerp(game.renderState.ball.x, game.state().ball.x, lerpTime);
-   // game.renderState.ball.y = lerp(game.renderState.ball.y, game.state().ball.y, lerpTime);
+   const lerpTime = Math.min(realDelta * window.smoothing, 1);
+   game.renderState.ball.x = lerp(game.renderState.ball.x, game.state().ball.x, lerpTime);
+   game.renderState.ball.y = lerp(game.renderState.ball.y, game.state().ball.y, lerpTime);
 
-   // for (const id of Object.keys(game.renderState.paddles)) {
-   //    const paddle = game.renderState.paddles[id];
-   //    const realPaddle = copy(game.state().paddles[id]);
-   //    paddle.x = lerp(paddle.x, realPaddle.x, lerpTime);
-   //    paddle.y = lerp(paddle.y, realPaddle.y, lerpTime);
-   //    paddle.width = lerp(paddle.width, realPaddle.width, lerpTime * 0.2);
-   //    paddle.height = lerp(paddle.height, realPaddle.height, lerpTime * 0.2);
-   //    paddle.text = realPaddle.text;
-   //    paddle.textOpacity = realPaddle.textOpacity;
-   // }
-   // game.renderState.ball.radius = lerp(game.renderState.ball.radius, game.state().ball.radius, lerpTime * 0.2);
+   for (const id of Object.keys(game.renderState.players)) {
+      const player = game.renderState.players[id];
+      const realPlayer = copy(game.state().players[id]);
+      player.x = lerp(player.x, realPlayer.x, lerpTime);
+      player.y = lerp(player.y, realPlayer.y, lerpTime);
+   }
 
    return { game, ctx, canvas };
 };

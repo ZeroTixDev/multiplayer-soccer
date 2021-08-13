@@ -27,14 +27,26 @@ function parseState(data, players) {
       state.bound = data.bound;
    }
 
+   if (data.goals) {
+      state.goals = data.goals;
+   }
+
    state.players = {};
    for (const playerId of Object.keys(players)) {
       const player = players[playerId];
       const team = player.team;
+      let x, y;
+      if (team === 'red') {
+         x = state.bound.width / 4;
+         y = state.bound.height / 2;
+      } else {
+         x = state.bound.width / 2 + state.bound.width / 4;
+         y = state.bound.height / 2;
+      }
       state.players[playerId] = {
-         x: Math.random() * 1600,
-         y: Math.random() * 900,
-         radius: 45,
+         x,
+         y,
+         radius: 40,
          xv: 0,
          yv: 0,
          name: player.name,
@@ -220,6 +232,13 @@ module.exports = class Room {
             this.inputs[this.tick] === undefined ? {} : this.inputs[this.tick]
          );
          if (this.states[this.tick + 1].won === true) {
+            this.update = true;
+            this.state = 'chat';
+            this.sendPackage['change'] = 'chat';
+            this.readyCount = 0;
+            for (const player of Object.values(this.players)) {
+               player.ready = false;
+            }
             // const scores = this.states[this.tick + 1].scores;
             // for (const id of Object.keys(scores)) {
             //    const score = scores[id];

@@ -13,10 +13,10 @@ const {
 } = require('./constants.js');
 
 function intersectRectCircle(rect, circle) {
-   const cx = Math.abs(circle.x - rect.x);
+   const cx = Math.abs(circle.x - rect.x - rect.width / 2);
    const xDist = rect.width / 2 + circle.radius;
    if (cx > xDist) return false;
-   const cy = Math.abs(circle.y - rect.y);
+   const cy = Math.abs(circle.y - rect.y - rect.height / 2);
    const yDist = rect.height / 2 + circle.radius;
    if (cy > yDist) return false;
    if (cx <= rect.width / 2 || cy <= rect.height / 2) return true;
@@ -28,9 +28,9 @@ function intersectRectCircle(rect, circle) {
    return xCornerDistSq + yCornerDistSq <= maxCornerDistSq;
 }
 
-const knock = 100;
-const accel = 700;
-const friction = 0.9;
+const knock = 300;
+const accel = 500;
+const friction = 0.97;
 function simulatePlayer(player, state, Input, delta) {
    const input = Input === undefined ? player.input : Input;
    player.input = { up: input.up, left: input.left, down: input.down, right: input.right };
@@ -46,40 +46,52 @@ function simulatePlayer(player, state, Input, delta) {
    if (input.right) {
       player.xv += accel * delta * input.right;
    }
-   player.xv *= Math.pow(friction, delta * 10);
-   player.yv *= Math.pow(friction, delta * 10);
+   player.xv *= Math.pow(friction, delta * 15);
+   player.yv *= Math.pow(friction, delta * 15);
    player.x += player.xv * delta;
    player.y += player.yv * delta;
 
    if (player.x + player.radius > state.bound.width + state.bound.x) {
       player.x = state.bound.width + state.bound.x - player.radius;
-      player.xv = 0;
+      player.xv *= -0.3;
    }
    if (player.x - player.radius < state.bound.x) {
       player.x = state.bound.x + player.radius;
-      player.xv = 0;
+      player.xv *= -0.3;
    }
    if (player.y + player.radius > state.bound.y + state.bound.height) {
       player.y = state.bound.y + state.bound.height - player.radius;
-      player.yv = 0;
+      player.yv *= -0.3;
    }
    if (player.y - player.radius < state.bound.y) {
       player.y = state.bound.y + player.radius;
-      player.yv = 0;
+      player.yv *= -0.3;
    }
 
    const distX = player.x - state.ball.x;
    const distY = player.y - state.ball.y;
    if (distX * distX + distY * distY < (player.radius + state.ball.radius) * (player.radius + state.ball.radius)) {
-      const magnitude = Math.sqrt(distX * distX + distY * distY) || 1;
-      const xv = distX / magnitude;
-      const yv = distY / magnitude;
-      player.x = state.ball.x + (state.ball.radius + 0.05 + player.radius) * xv;
-      player.y = state.ball.y + (state.ball.radius + 0.05 + player.radius) * yv;
-      player.xv += xv * knock * 2;
-      player.yv += yv * knock * 2;
-      state.ball.xv += -xv * knock * 5;
-      state.ball.yv += -yv * knock * 5;
+      const v_collision = {
+         x: player.x - state.ball.x,
+         y: player.y - state.ball.y,
+      };
+      const distance = Math.sqrt(v_collision.x * v_collision.x + v_collision.y * v_collision.y);
+      const v_collision_norm = {
+         x: v_collision.x / distance,
+         y: v_collision.y / distance,
+      };
+      const v_relative_velocity = {
+         x: state.ball.xv - player.xv,
+         y: state.ball.yv - player.yv,
+      };
+      const speed = v_relative_velocity.x * v_collision_norm.x + v_relative_velocity.y * v_collision_norm.y;
+      if (speed > 0) {
+         const impulse = (2 * speed) / (state.ball.radius + player.radius - 8);
+         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 1.2;
+         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 1.2;
+         player.xv += impulse * state.ball.radius * v_collision_norm.x * 0.8;
+         player.yv += impulse * state.ball.radius * v_collision_norm.y * 0.8;
+      }
    }
    return player;
 }
@@ -103,10 +115,10 @@ module.exports = function simulate(oldState, inputs) {
             const magnitude = Math.sqrt(distX * distX + distY * distY) || 1;
             const xv = distX / magnitude;
             const yv = distY / magnitude;
-            player1.xv += xv * knock;
-            player1.yv += yv * knock;
-            player2.xv += -xv * knock;
-            player2.yv += -yv * knock;
+            player1.xv = xv * knock;
+            player1.yv = yv * knock;
+            player2.xv = -xv * knock;
+            player2.yv = -yv * knock;
             player1.x = player2.x + (player1.radius + 0.05 + player2.radius) * xv;
             player1.y = player2.y + (player1.radius + 0.05 + player2.radius) * yv;
          }
@@ -115,23 +127,31 @@ module.exports = function simulate(oldState, inputs) {
 
    state.ball.x += state.ball.xv * delta;
    state.ball.y += state.ball.yv * delta;
-   state.ball.xv *= Math.pow(friction, delta * 5);
-   state.ball.yv *= Math.pow(friction, delta * 5);
-   if (state.ball.x + state.ball.radius > state.bound.width + state.bound.x) {
-      state.ball.x = state.bound.width + state.bound.x - state.ball.radius;
-      state.ball.xv *= -1;
+   state.ball.xv *= Math.pow(0.99, delta * 30);
+   state.ball.yv *= Math.pow(0.99, delta * 30);
+   for (const goal of Object.values(state.goals)) {
+      if (intersectRectCircle(goal, state.ball)) {
+         state.won = true;
+         break;
+      }
    }
-   if (state.ball.x - state.ball.radius < state.bound.x) {
-      state.ball.x = state.bound.x + state.ball.radius;
-      state.ball.xv *= -1;
-   }
-   if (state.ball.y + state.ball.radius > state.bound.y + state.bound.height) {
-      state.ball.y = state.bound.y + state.bound.height - state.ball.radius;
-      state.ball.yv *= -1;
-   }
-   if (state.ball.y - state.ball.radius < state.bound.y) {
-      state.ball.y = state.bound.y + state.ball.radius;
-      state.ball.yv *= -1;
+   if (!state.won) {
+      if (state.ball.x + state.ball.radius > state.bound.width + state.bound.x) {
+         state.ball.x = state.bound.width + state.bound.x - state.ball.radius;
+         state.ball.xv *= -1;
+      }
+      if (state.ball.x - state.ball.radius < state.bound.x) {
+         state.ball.x = state.bound.x + state.ball.radius;
+         state.ball.xv *= -1;
+      }
+      if (state.ball.y + state.ball.radius > state.bound.y + state.bound.height) {
+         state.ball.y = state.bound.y + state.bound.height - state.ball.radius;
+         state.ball.yv *= -1;
+      }
+      if (state.ball.y - state.ball.radius < state.bound.y) {
+         state.ball.y = state.bound.y + state.ball.radius;
+         state.ball.yv *= -1;
+      }
    }
    // for (const paddleId of Object.keys(state.paddles)) {
    //    const paddle = state.paddles[paddleId];
