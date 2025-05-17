@@ -523,7 +523,7 @@ async function handleNetworkRequestsAndText() {
       let raf = null;
       new Promise((resolve, reject) => {
          let wrote = false;
-         setTimeout(async () => {
+         // setTimeout(async () => {
             (async function run() {
                raf = requestAnimationFrame(run);
                if (window.socketStatus != null) {
@@ -539,7 +539,7 @@ async function handleNetworkRequestsAndText() {
                   }
                }
             })();
-         }, 200);
+         // }, 200);
       }).then(() => {
          new Promise(async (resolve, reject) => {
             ref.connectionText.innerHTML += '<br>';
@@ -550,7 +550,7 @@ async function handleNetworkRequestsAndText() {
             let wrote = false;
             const roomsWaitTime = 10;
             send({ type: 'rooms' });
-            setTimeout(async () => {
+            // setTimeout(async () => {
                (async function check(now = 0) {
                   raf = requestAnimationFrame(check);
                   time += (now - lastTime) / 1000;
@@ -569,7 +569,7 @@ async function handleNetworkRequestsAndText() {
                      reject();
                   }
                })();
-            }, 200);
+            // }, 200);
          }).then(() => {
             ref.connectionText.innerHTML += '<br>';
             typeWriter('Fetching room data...', ref.connectionText).then(() => {

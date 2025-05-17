@@ -29,8 +29,8 @@ function intersectRectCircle(rect, circle) {
 }
 
 const knock = 50;
-const accel = 600;
-const friction = 0.94;
+const accel = 1250;
+const friction = 0.87;
 function simulatePlayer(player, state, Input, delta) {
    const input = Input === undefined ? player.input : Input;
    player.input = { up: input.up, left: input.left, down: input.down, right: input.right };
@@ -53,19 +53,19 @@ function simulatePlayer(player, state, Input, delta) {
 
    if (player.x + player.radius > state.bound.width + state.bound.x) {
       player.x = state.bound.width + state.bound.x - player.radius;
-      player.xv *= -0.6;
+      player.xv *= -0.5;
    }
    if (player.x - player.radius < state.bound.x) {
       player.x = state.bound.x + player.radius;
-      player.xv *= -0.6;
+      player.xv *= -0.5;
    }
    if (player.y + player.radius > state.bound.y + state.bound.height) {
       player.y = state.bound.y + state.bound.height - player.radius;
-      player.yv *= -0.6;
+      player.yv *= -0.5;
    }
    if (player.y - player.radius < state.bound.y) {
       player.y = state.bound.y + player.radius;
-      player.yv *= -0.6;
+      player.yv *= -0.5;
    }
 
    const distX = player.x - state.ball.x;
@@ -131,7 +131,12 @@ module.exports = function simulate(oldState, inputs) {
    state.ball.yv *= Math.pow(0.99, delta * 30);
    for (const goal of Object.values(state.goals)) {
       if (intersectRectCircle(goal, state.ball)) {
-         state.won = goal.team;
+         // state.won = goal.team;
+         // state.ball.xv *= Math.pow(0.8, delta * 30);
+         // state.ball.yv *= Math.pow(0.8, delta * 30);
+         // if (state.ball.xv < 1 && state.ball.yv < 1) {
+            state.won = goal.team;
+         // }
          break;
       }
    }

@@ -1,5 +1,5 @@
 'use strict';
 
 module.exports = {
-   typingSpeed: 40,
+   typingSpeed: 100,
 };
