@@ -122,7 +122,7 @@ function drawPlayers(game, { ctx }) {
       ctx.fill();
       ctx.shadowBlur = 0;
       ctx.fillStyle = 'white';////''black';
-      ctx.font = '40px Lexend';
+      ctx.font = '30px Lexend';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(player.name, Math.round(pos.x), Math.round(pos.y - player.radius - 25));
