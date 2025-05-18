@@ -28,7 +28,7 @@ function intersectRectCircle(rect, circle) {
    return xCornerDistSq + yCornerDistSq <= maxCornerDistSq;
 }
 
-const knock = 200;
+const knock = 800;
 // const accel = 1100;
 // const friction = 0.9;
 const accel = 1500;
