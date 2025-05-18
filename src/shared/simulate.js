@@ -32,7 +32,7 @@ const knock = 100;
 // const accel = 1100;
 // const friction = 0.9;
 const accel = 1200;
-const friction = 0.85;
+const friction = 0.95;
 function simulatePlayer(player, state, Input, delta) {
    const input = Input === undefined ? player.input : Input;
    player.input = { up: input.up, left: input.left, down: input.down, right: input.right };
