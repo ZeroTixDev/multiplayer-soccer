@@ -28,11 +28,11 @@ function intersectRectCircle(rect, circle) {
    return xCornerDistSq + yCornerDistSq <= maxCornerDistSq;
 }
 
-const knock = 300;
+const knock = 100;
 // const accel = 1100;
 // const friction = 0.9;
-const accel = 1500;
-const friction = 0.88;
+const accel = 900;
+const friction = 0.9;
 function simulatePlayer(player, state, Input, delta) {
    const input = Input === undefined ? player.input : Input;
    player.input = { up: input.up, left: input.left, down: input.down, right: input.right };
