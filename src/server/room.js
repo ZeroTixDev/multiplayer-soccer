@@ -46,7 +46,7 @@ function parseState(data, players) {
       state.players[playerId] = {
          x,
          y,
-         radius: 35,
+         radius: 25,
          xv: 0,
          yv: 0,
          name: player.name,
