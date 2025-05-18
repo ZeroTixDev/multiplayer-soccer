@@ -26,11 +26,19 @@ app.get('/shared/:fileName', (request, result) => {
    result.sendFile(path.join(__dirname, String('../shared/' + request.params.fileName)));
 });
 
+app.get('/fonts/:fileName', (request, result) => {
+      result.sendFile(
+         path.join(__dirname, String('../client/fonts/' + request.params.fileName))
+      );
+});
+
 server.on('upgrade', (request, socket, head) => {
    wss.handleUpgrade(request, socket, head, (socket) => {
       wss.emit('connection', socket, request);
    });
 });
+
+
 
 app.use(express.static('dist'));
 

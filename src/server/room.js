@@ -46,7 +46,7 @@ function parseState(data, players) {
       state.players[playerId] = {
          x,
          y,
-         radius: 30,
+         radius: 35,
          xv: 0,
          yv: 0,
          name: player.name,
@@ -93,6 +93,10 @@ module.exports = class Room {
          red: [],
          blue: [],
       };
+      this.wins = {
+         red: 0,
+         blue: 0,
+      }
    }
    get playerCount() {
       return Object.keys(this.players).length;
@@ -240,7 +244,8 @@ module.exports = class Room {
             for (const player of Object.values(this.players)) {
                player.ready = false;
             }
-            this.talk('SERVER', `${team === 'blue' ? 'Red' : 'Blue'} team has won the game!`);
+            this.wins[team] += 1;
+            this.talk('SERVER', `${team === 'blue' ? 'Red' : 'Blue'} team has won the game! (Red ${this.wins['red']} - Blue ${this.wins['blue']})`);
             // const scores = this.states[this.tick + 1].scores;
             // for (const id of Object.keys(scores)) {
             //    const score = scores[id];

@@ -53,6 +53,18 @@ module.exports = {
                name: 'sounds/[name].[ext]',
             },
          },
+         {
+            test: /\.(ttf)$/,
+            use: [
+               {
+                  loader: 'url-loader',
+                  options: {
+                     limit: 8000, // Convert images < 8kb to base64 strings
+                     name: 'fonts/[name].[ext]',
+                  },
+               },
+            ],
+         },
       ],
    },
    plugins,

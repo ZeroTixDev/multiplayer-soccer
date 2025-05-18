@@ -5,18 +5,18 @@
     <link rel="preconnect" href="https://fonts.gstatic.com">
 	 <link rel="preconnect" href="https://fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap" rel="stylesheet">
-    <!-- <link rel="icon" type="image/svg" href="/logo.svg"/> -->
+	<meta property="og:image" content="/favicon.png" />
     <title><%= htmlWebpackPlugin.options.title %></title>
   </head>
 
   <body oncontextmenu="return false">
   		<div class="loading">
-			<h1 class="title">Soccer</h1>
+			<h1 class="title">Evades X - Soccer</h1>
   			<div class="connection-text"></div>
   			<div class="loader"></div>
   		</div>
   		<div class="menu hidden">
-  			<h1 class="title">Soccer</h1>
+  			<h1 class="title">Evades X - Soccer</h1>
   			<div id="username-overlay" class="overlay hidden">
   				<span class="text">Username </span>
   				<input class="username-input" type="text" autocomplete="off" spellcheck="false" maxlength="16">
@@ -30,7 +30,8 @@
   			<div class="main">
   				<h1>Rooms</h1>
   				<div class="rooms overflow"></div>
-  				<button class="create">Create</button>
+  				<button class="create">Create Room</button>
+				<a href="https://www.evadesx.online/"><button class="back">Back to Evades X</button></a>
   			</div>
   			<div class="create-menu hidden">
   				<div class="private sec">
@@ -92,7 +93,7 @@
   			<canvas class="game-canvas">This game needs Canvas Support</canvas>
   			<div class="gui">
   				<!-- <button class="forfeit">Forfeit</button> -->
-  				<div class="ping">Ping: <span class="ping-text">0</span>ms</div>
+  				<!-- <div class="ping">Ping: <span class="ping-text">0</span>ms</div> -->
   			</div>
   		</div>
   </body>

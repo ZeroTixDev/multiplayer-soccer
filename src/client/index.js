@@ -266,7 +266,7 @@ function serverMessage(msg, t) {
       }
       pings.push(time() - msg.ping);
       window.ping = Math.round(pings.reduce((a, b) => a + b) / pings.length);
-      ref.pingText.innerText = `${Math.round(pings.reduce((a, b) => a + b) / pings.length)}`;
+      // ref.pingText.innerText = ``;//${Math.round(pings.reduce((a, b) => a + b) / pings.length)}`;
    }
    if (msg.type === 'my-room-update') {
       const roomData = msg.data;

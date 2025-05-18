@@ -3,11 +3,17 @@
    padding: 0;
    box-sizing: border-box;
 }
+
+@font-face {
+   font-family: 'Inter';
+   src: url('./fonts/Inter-Regular.ttf');
+}
+
 body {
    font-size: 16px;
-   font-family: 'Lexend', sans-serif;
+   font-family: 'Inter', sans-serif;
    /* background-color: #051f0d; */
-   background-color: rgb(0, 0, 0);
+   background-color: #1f2229;
    user-select: none;
 }
 
@@ -23,7 +29,7 @@ body {
    top: 0;
    height: 60px;
    width: 100vw;
-   background-color: #051f0da8;
+   background-color: #323645;
    display: flex;
    justify-content: center;
    align-items: center;
@@ -48,7 +54,7 @@ body {
 }
 
 .menu .main {
-   background-color: rgba(0, 0, 0, 0);
+   background-color: rgba(0,0,0,0);
    position: absolute;
    left: 50px;
    top: 50px;
@@ -63,7 +69,7 @@ body {
 }
 
 .create,
-.create-room {
+.create-room, .back {
    position: relative;
    left: 0;
    margin: 10px;
@@ -71,13 +77,19 @@ body {
    font-size: 1.3rem;
    padding-right: 80px;
    padding-left: 80px;
-   background-color: rgba(5, 4, 8, 0.4);
+   background-color: #1f2229;
    color: white;
    transition: background-color 0.1s linear;
+   border: 5px solid white;
 }
 
+.back {
+   border: none !important;
+}
+
+
 .create:hover,
-.create-room:hover {
+.create-room:hover,.back:hover {
    background-color: rgba(5, 4, 8, 0.8);
 }
 
@@ -90,7 +102,7 @@ body {
    top: 10%;
    width: 80%;
    height: 80%;
-   background-color: #1838228c;
+   background-color: #1f222983;
 }
 
 .red-team {
@@ -99,7 +111,7 @@ body {
    top: 60px;
    /* width: 50vw; */
    height: calc(60vh - 120px);
-   background-color: rgba(199, 62, 62, 0.644);
+   background: linear-gradient(180deg, rgba(199, 62, 62, 0.644), rgba(0,0,0,0));
 }
 
 .team {
@@ -173,7 +185,8 @@ body {
    top: 60px;
    /* width: 50vw; */
    height: calc(60vh - 120px);
-   background-color: rgba(62, 110, 199, 0.644);
+   background: linear-gradient(180deg, rgba(62, 110, 199, 0.644), rgba(0,0,0,0));
+
 }
 
 .overflow {
@@ -265,7 +278,7 @@ body {
 .room {
    position: relative;
    width: 100%;
-   background-color: rgba(0, 0, 0, 0);
+   background-color: #1f2229;
    transition: background-color 0.05s linear;
    padding-top: 20px;
    padding-bottom: 40px;
@@ -300,7 +313,7 @@ body {
 }
 
 .room:hover {
-   background-color: rgba(9, 39, 23, 0.4);
+   background-color: rgba(28, 9, 39, 0.4);
 }
 
 .rooms .loader {
@@ -443,7 +456,7 @@ input:checked + .slider:before {
 }
 
 .chat-div {
-   background-color: #2d695a;
+   background-color: #1f2229;
    position: absolute;
    left: 0;
    top: 60vh;
@@ -481,7 +494,8 @@ input:checked + .slider:before {
 .chat-messages {
    width: calc(100vw - 205px);
    height: calc(100vh - 60vh - 45px);
-   background-color: rgba(0, 0, 0, 0.1);
+   /* background-color: rgba(0, 0, 0, 0.1); */
+   background: #323645;
 }
 
 .ready:hover {
@@ -492,7 +506,7 @@ input:checked + .slider:before {
    position: absolute;
    left: 0;
    bottom: 0;
-   background-color: #123f34;
+   background-color:#1f2229;
    width: 100vw;
    height: 45px;
    border: none;
@@ -514,6 +528,7 @@ input:checked + .slider:before {
    justify-content: center;
    align-items: center;
    overflow: hidden;
+   background: black;
    /* background-color: #3f6342; */
 }
 
@@ -535,7 +550,7 @@ input:checked + .slider:before {
 }
 
 .server-message {
-   color: black;
+   color: rgb(148, 255, 136);
 }
 
 canvas {
@@ -671,7 +686,7 @@ canvas {
    width: 100px;
    height: 100px;
    border-radius: 50%;
-   border: 15px solid #051f0d;
+   border: 15px solid #1f2229;
    border-bottom: 15px solid white;
    border-right: 15px solid white;
    transform: rotate(0deg);

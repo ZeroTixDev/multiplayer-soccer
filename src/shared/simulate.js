@@ -28,9 +28,11 @@ function intersectRectCircle(rect, circle) {
    return xCornerDistSq + yCornerDistSq <= maxCornerDistSq;
 }
 
-const knock = 50;
-const accel = 1050;
-const friction = 0.9;
+const knock = 500;
+// const accel = 1100;
+// const friction = 0.9;
+const accel = 2000;
+const friction = 0.82;
 function simulatePlayer(player, state, Input, delta) {
    const input = Input === undefined ? player.input : Input;
    player.input = { up: input.up, left: input.left, down: input.down, right: input.right };
@@ -87,10 +89,10 @@ function simulatePlayer(player, state, Input, delta) {
       const speed = v_relative_velocity.x * v_collision_norm.x + v_relative_velocity.y * v_collision_norm.y;
       if (speed > 0) {
          const impulse = (2 * speed) / (state.ball.radius + player.radius - 8);
-         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 1.2;
-         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 1.2;
-         player.xv += impulse * state.ball.radius * v_collision_norm.x * 0.8;
-         player.yv += impulse * state.ball.radius * v_collision_norm.y * 0.8;
+         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 1.4;
+         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 1.4;
+         player.xv += impulse * state.ball.radius * v_collision_norm.x * 0.6;
+         player.yv += impulse * state.ball.radius * v_collision_norm.y * 0.6;
       }
    }
    return player;
@@ -132,12 +134,13 @@ module.exports = function simulate(oldState, inputs) {
    for (const goal of Object.values(state.goals)) {
       if (intersectRectCircle(goal, state.ball)) {
          // state.won = goal.team;
-         // state.ball.xv *= Math.pow(0.8, delta * 30);
-         // state.ball.yv *= Math.pow(0.8, delta * 30);
-         // if (state.ball.xv < 1 && state.ball.yv < 1) {
+         state.ball.xv *= Math.pow(0.85, delta * 30);
+         state.ball.yv *= Math.pow(0.85, delta * 30);
+         if (state.ball.xv < 0.5 && state.ball.yv < 0.5) {
             state.won = goal.team;
-         // }
-         break;
+         }
+         // break;
+         return state;
       }
    }
    if (!state.won) {

@@ -9,7 +9,7 @@ const round = (value) => Math.round(value);
 // }
 
 module.exports = function Render({ game, ctx, canvas }) {
-   ctx.fillStyle = 'black';//'#045200';
+   ctx.fillStyle = '#1f2229';//'#045200';
    ctx.fillRect(0, 0, canvas.width, canvas.height);
    if (game === undefined) return;
    // if (game.countdown !== undefined || game.countdownAlpha + 0.5 <= 0) {
@@ -83,20 +83,27 @@ function drawGoals(game, { ctx }) {
 
 function drawBound(game, { ctx }) {
    const { x, y, width, height } = game.state().bound;
-   ctx.fillStyle = 'rgb(20, 20, 20)'//'#3c9137';
+   ctx.fillStyle = '#323645'//'#3c9137';
    const pos = offset(x, y, game, ctx.canvas);
    ctx.fillRect(pos.x, pos.y, width, height);
-   ctx.lineWidth = 5;
-   ctx.strokeStyle = 'rgb(200, 200, 200)';//'#145e10';
+   ctx.lineWidth = 4;
+   ctx.strokeStyle = '#1f2229';//'#145e10';
    let amount = 2;
-   ctx.globalAlpha = 0.5;
+   ctx.globalAlpha = 0.1;
+   for (let y = 0; y < height; y += 70) {
+      for (let x = 0; x < width; x += 70) {
+         const pos = offset(x, y, game, ctx.canvas);
+         ctx.strokeRect(pos.x, pos.y, 70, 70);
+      }
+   }
+   ctx.globalAlpha = 1;
    for (let y = 0; y < height; y += height / amount) {
       for (let x = 0; x < width; x += width / amount) {
          const pos = offset(x, y, game, ctx.canvas);
          ctx.strokeRect(pos.x, pos.y, width / amount, height / amount);
       }
    }
-   amount = 10;
+   // amount = 10;
    // ctx.globalAlpha = 0.5;
    // for (let y = 0; y < height; y += height / amount) {
    //    for (let x = 0; x < width; x += width / amount) {
@@ -111,21 +118,22 @@ function drawPlayers(game, { ctx }) {
    for (const playerId of Object.keys(game.renderState.players)) {
       const player = game.renderState.players[playerId];
       ctx.beginPath();
-      ctx.strokeStyle = player.team === 'red' ? '#ab0f0f' : '#1d1f80';
-      ctx.fillStyle = ctx.strokeStyle;
-      ctx.lineWidth = 8;
-      ctx.shadowBlur = 8;
+      ctx.strokeStyle = player.team === 'red' ? '#eb2d2d' : '#4157ba';
+      ctx.fillStyle = 'black';
+      ctx.lineWidth = 10;
+      ctx.shadowBlur = 5;
       ctx.shadowColor = ctx.strokeStyle;
       const pos = offset(player.x, player.y, game, ctx.canvas);
-      ctx.arc(Math.round(pos.x), Math.round(pos.y), player.radius-ctx.lineWidth/2, 0, Math.PI * 2);
+      ctx.arc(Math.round(pos.x), Math.round(pos.y), player.radius -ctx.lineWidth /2, 0, Math.PI * 2);
       ctx.stroke();
       ctx.fill();
       ctx.shadowBlur = 0;
-      ctx.fillStyle = 'white';////''black';
-      ctx.font = '30px Lexend';
+      ctx.fillStyle = 'white';////''black`';
+      ctx.font = `${20 + (Math.round(player.radius) + 0.5) / 25 }px Inter`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
-      ctx.fillText(player.name, Math.round(pos.x), Math.round(pos.y - player.radius - 25));
+      ctx.fillText(player.name, Math.round(pos.x), Math.round(pos.y + player.radius + player.radius / 3 + player.radius / 8));
+
       if (window.debugMode) {
          ctx.fillStyle = 'white';
          ctx.fillText(player.ticksBehind, Math.round(pos.x), Math.round(pos.y));
@@ -138,7 +146,7 @@ function drawBall(game, { ctx }) {
    const pos = offset(ball.x, ball.y, game, ctx.canvas);
    ctx.strokeStyle = '#ffffff';
    ctx.fillStyle = ctx.strokeStyle;
-   ctx.shadowBlur = 12;
+   // ctx.shadowBlur = 10;
    ctx.shadowColor = ctx.strokeStyle;
    ctx.lineWidth = 12;
    ctx.beginPath();
