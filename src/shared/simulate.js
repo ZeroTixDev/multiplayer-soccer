@@ -28,11 +28,11 @@ function intersectRectCircle(rect, circle) {
    return xCornerDistSq + yCornerDistSq <= maxCornerDistSq;
 }
 
-const knock = 500;
+const knock = 200;
 // const accel = 1100;
 // const friction = 0.9;
-const accel = 1900;
-const friction = 0.85;
+const accel = 1500;
+const friction = 0.9;
 function simulatePlayer(player, state, Input, delta) {
    const input = Input === undefined ? player.input : Input;
    player.input = { up: input.up, left: input.left, down: input.down, right: input.right };
@@ -134,8 +134,8 @@ module.exports = function simulate(oldState, inputs) {
    for (const goal of Object.values(state.goals)) {
       if (intersectRectCircle(goal, state.ball)) {
          // state.won = goal.team;
-         state.ball.xv *= Math.pow(0.85, delta * 30);
-         state.ball.yv *= Math.pow(0.85, delta * 30);
+         state.ball.xv *= Math.pow(0.8, delta * 30);
+         state.ball.yv *= Math.pow(0.8, delta * 30);
          if (state.ball.xv < 0.5 && state.ball.yv < 0.5) {
             state.won = goal.team;
          }
