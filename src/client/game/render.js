@@ -1,6 +1,7 @@
 'use strict';
 
 const round = (value) => Math.round(value);
+window.scaling = 1;
 // const {  } = require('../../shared/constants.js');
 
 // let phraseText = '';
@@ -11,6 +12,24 @@ const round = (value) => Math.round(value);
 module.exports = function Render({ game, ctx, canvas }) {
    ctx.fillStyle = '#1f2229';//'#045200';
    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+   // if (Math.abs(game.renderState.players[selfId].x - game.renderState.ball.x)*(1/scaling) > 400) {
+   //    scaling -= 0.01;
+   // } else if (Math.abs(game.renderState.players[selfId].y - game.renderState.ball.y)*(1/scaling) > 250) {
+   //    scaling -= 0.01;
+   // } else {
+   //    scaling += 0.01;
+   // }
+   // if (scaling < 0.75) {
+   //    scaling = 0.75;
+   // }
+   // if (scaling > 1) {
+   //    scaling = 1;
+   // }
+
+   ctx.translate(canvas.width /2 , canvas.height / 2);
+   ctx.scale(scaling, scaling)
+   ctx.translate(-canvas.width /2 , -canvas.height / 2);
    if (game === undefined) return;
    // if (game.countdown !== undefined || game.countdownAlpha + 0.5 <= 0) {
    //    ctx.fillStyle = 'white';
@@ -43,6 +62,9 @@ module.exports = function Render({ game, ctx, canvas }) {
       //    drawChat({ ctx, canvas });
       // }
    }
+   ctx.translate(canvas.width /2 , canvas.height / 2);
+   ctx.scale(1/scaling, 1/scaling)
+   ctx.translate(-canvas.width /2 , -canvas.height / 2);
 };
 
 function offset(x, y, game, canvas) {
