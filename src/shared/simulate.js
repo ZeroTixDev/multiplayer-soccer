@@ -31,8 +31,8 @@ function intersectRectCircle(rect, circle) {
 const knock = 500;
 // const accel = 1100;
 // const friction = 0.9;
-const accel = 1600;
-const friction = 0.9;
+const accel = 1900;
+const friction = 0.85;
 function simulatePlayer(player, state, Input, delta) {
    const input = Input === undefined ? player.input : Input;
    player.input = { up: input.up, left: input.left, down: input.down, right: input.right };
