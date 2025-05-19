@@ -1,7 +1,7 @@
 {
    "ball": {
       "x": 1750,
-      "y": 490,
+      "y": 420,
       "radius": 30,
       "xv": 0,
       "yv": 0
@@ -10,20 +10,20 @@
       "x": 0,
       "y": 0,
       "width": 3500,
-      "height": 980
+      "height": 840
    },
    "goals": {
       "red": {
          "team": "red",
          "x": -198,
-         "y": 290,
+         "y": 220,
          "width": 200,
          "height": 400
       },
       "blue": {
          "team": "blue",
          "x": 3498,
-         "y": 290,
+         "y": 220,
          "width": 200,
          "height": 400
       }
