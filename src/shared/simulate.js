@@ -58,8 +58,8 @@ function simulatePlayer(player, state, Input, delta) {
       player.shift = false;
    }
    if (player.shift) {
-      player.xv *= Math.pow(friction, delta * 10);
-      player.yv *= Math.pow(friction, delta * 10);
+      player.xv *= Math.pow(friction, delta * 20);
+      player.yv *= Math.pow(friction, delta * 20);
    }
    player.x += player.xv * delta;
    player.y += player.yv * delta;
