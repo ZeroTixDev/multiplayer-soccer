@@ -51,7 +51,8 @@ function parseState(data, players) {
          yv: 0,
          name: player.name,
          team,
-         input: { right: false, up: false, left: false, down: false },
+         input: { right: false, up: false, left: false, down: false, shift: false },
+         shift: false,
       };
    }
    // if (data.scores) {
@@ -147,7 +148,7 @@ module.exports = class Room {
    createEmptyInputs() {
       const input = {};
       Object.keys(this.players).forEach((id) => {
-         input[id] = { up: false, down: false, left: false, right: false };
+         input[id] = { up: false, down: false, left: false, right: false, shift: false };
       });
       return input;
    }
@@ -195,7 +196,8 @@ module.exports = class Room {
          input1.up === input2.up &&
          input1.down === input2.down &&
          input1.right === input2.right &&
-         input1.left === input2.left
+         input1.left === input2.left &&
+         input1.shift === input2.shift
       );
    }
    gameUpdate() {

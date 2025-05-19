@@ -9,7 +9,7 @@ const hash = require('../shared/hash.js');
 const typeWriter = require('./util/typeWriter.js');
 const resize = require('./util/resize.js');
 const Game = require('./game/game.js');
-const { COUNTDOWN, controls } = require('../shared/constants.js');
+const { COUNTDOWN, controls, SMOOTHING_RATE } = require('../shared/constants.js');
 const copy = require('../shared/copy.js');
 const { loadSound } = require('./sounds.js');
 const moment = require('moment');
@@ -19,7 +19,7 @@ let rooms = null;
 let roomId = null;
 window.chatSound = loadSound('chat.wav');
 window.chatSound.volume = 0.2;
-window.smoothing = 30;
+window.smoothing = SMOOTHING_RATE;
 window.selfId = null;
 window.game = null;
 window.gameState = null;
@@ -28,8 +28,8 @@ window.debugMode = false;
 window.time = () => {
    return utc().unix() * 1000 + utc().milliseconds();
 };
-window.currentInput = { up: false, down: false, left: false, right: false };
-window.lastInput = { up: false, down: false, left: false, right: false };
+window.currentInput = { up: false, down: false, left: false, right: false, shift: false };
+window.lastInput = { up: false, down: false, left: false, right: false, shift: false };
 let state = null; // THIS IS NULL
 window.gameRaf = null;
 window.extraLag = 0;
@@ -66,6 +66,7 @@ function trackKeys(event) {
    const control = controls[event.code];
    if (control === undefined) return;
    if (control.movement) {
+      console.log(control.name, event.code)
       window.currentInput[control.name] = event.type === 'keydown';
    }
    if (control.forfeit && event.type === 'keydown') {
@@ -333,8 +334,8 @@ function serverMessage(msg, t) {
          ref.chat.classList.add('hidden');
          state = 'game';
          console.log('going into the game.');
-         window.currentInput = { up: false, down: false, right: false, left: false };
-         window.lastInput = { up: false, down: false, right: false, left: false };
+         window.currentInput = { up: false, down: false, right: false, left: false, shift: false };
+         window.lastInput = { up: false, down: false, right: false, left: false, shift: false };
          window.gameState = {
             inputs: [],
             pendingInputs: [],

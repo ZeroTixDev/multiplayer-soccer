@@ -101,6 +101,7 @@ module.exports = function Update(game) {
       const realPlayer = copy(game.state().players[id]);
       player.x = lerp(player.x, realPlayer.x, lerpTime);
       player.y = lerp(player.y, realPlayer.y, lerpTime);
+      player.shift = realPlayer.shift;
    }
 
    return { game, ctx, canvas };
@@ -115,7 +116,7 @@ function lerp(start, end, time) {
 }
 
 function copyInput(input) {
-   return { up: input.up, left: input.left, right: input.right, down: input.down };
+   return { up: input.up, left: input.left, right: input.right, down: input.down, shift: input.shift };
 }
 
 function isSameInput(input1, input2) {
@@ -123,6 +124,7 @@ function isSameInput(input1, input2) {
       input1.up === input2.up &&
       input1.left === input2.left &&
       input1.right === input2.right &&
-      input1.down === input2.down
+      input1.down === input2.down &&
+      input1.shift === input2.shift
    );
 }

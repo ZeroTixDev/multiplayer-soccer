@@ -28,14 +28,15 @@ function intersectRectCircle(rect, circle) {
    return xCornerDistSq + yCornerDistSq <= maxCornerDistSq;
 }
 
-const knock = 100;
+const knock = 200;
 // const accel = 1100;
 // const friction = 0.9;
 const accel = 2000;
 const friction = 0.85;
 function simulatePlayer(player, state, Input, delta) {
+   // delta = delta * 1.5;
    const input = Input === undefined ? player.input : Input;
-   player.input = { up: input.up, left: input.left, down: input.down, right: input.right };
+   player.input = { up: input.up, left: input.left, down: input.down, right: input.right, shift: input.shift };
    if (input.up) {
       player.yv -= accel * delta * input.up;
    }
@@ -50,6 +51,16 @@ function simulatePlayer(player, state, Input, delta) {
    }
    player.xv *= Math.pow(friction, delta * 15);
    player.yv *= Math.pow(friction, delta * 15);
+   // console.log(input);
+   if (input.shift) {
+      player.shift = true;
+   } else {
+      player.shift = false;
+   }
+   // if (player.shift) {
+   //    player.xv *= Math.pow(friction, delta * 15);
+   //    player.yv *= Math.pow(friction, delta * 15);
+   // }
    player.x += player.xv * delta;
    player.y += player.yv * delta;
 
@@ -89,8 +100,8 @@ function simulatePlayer(player, state, Input, delta) {
       const speed = v_relative_velocity.x * v_collision_norm.x + v_relative_velocity.y * v_collision_norm.y;
       if (speed > 0) {
          const impulse = (2 * speed) / (state.ball.radius + player.radius - 8);
-         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 1.2;
-         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 1.2;
+         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 1.2 * (player.shift ? 0.5: 1);
+         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 1.2 * (player.shift ? 0.5: 1);
          player.xv += impulse * state.ball.radius * v_collision_norm.x * 0.8;
          player.yv += impulse * state.ball.radius * v_collision_norm.y * 0.8;
       }

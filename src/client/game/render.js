@@ -143,7 +143,9 @@ function drawPlayers(game, { ctx }) {
       ctx.strokeStyle = player.team === 'red' ? '#eb2d2d' : '#4157ba';
       ctx.fillStyle = 'black';
       ctx.lineWidth = 10;
-      // ctx.shadowBlur = 5;
+      if (player.shift) {
+         ctx.shadowBlur = 15;
+      }
       ctx.shadowColor = ctx.strokeStyle;
       const pos = offset(player.x, player.y, game, ctx.canvas);
       ctx.arc(Math.round(pos.x), Math.round(pos.y), player.radius -ctx.lineWidth /2, 0, Math.PI * 2);
