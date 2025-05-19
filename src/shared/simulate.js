@@ -100,8 +100,8 @@ function simulatePlayer(player, state, Input, delta) {
       const speed = v_relative_velocity.x * v_collision_norm.x + v_relative_velocity.y * v_collision_norm.y;
       if (speed > 0) {
          const impulse = (2 * speed) / (state.ball.radius + player.radius - 8);
-         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 1.2 * (player.shift ? 1.2: 0.5);
-         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 1.2 * (player.shift ? 1.2: 0.5);
+         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 1.2 * (player.shift ? 1.3: 0.7);
+         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 1.2 * (player.shift ? 1.3: 0.7);
          player.xv += impulse * state.ball.radius * v_collision_norm.x * 0.8;
          player.yv += impulse * state.ball.radius * v_collision_norm.y * 0.8;
       }
