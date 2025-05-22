@@ -54,15 +54,22 @@ function simulatePlayer(player, state, Input, delta) {
    player.yv *= Math.pow(friction, delta * 15 * mult);
 
    if (mult == 0) {
-      player.xv *= 1.009;
-      player.yv *= 1.009;
+      player.shiftTimer++;
+      if (player.shiftTimer < 240) {
+         player.xv *= 1.009;
+         player.yv *= 1.009;
+      }
    }
 
    // console.log(input);
    if (input.shift) {
-      player.shift = true;
+      if (!player.shift) {
+         player.shift = true;
+         player.shiftTimer = 0;
+      }
    } else {
       player.shift = false;
+      player.shiftTimer--;
    }
    // if (player.shift) {
    //    // player.xv *= Math.pow(friction, delta * 20);
@@ -108,8 +115,8 @@ function simulatePlayer(player, state, Input, delta) {
       const speed = v_relative_velocity.x * v_collision_norm.x + v_relative_velocity.y * v_collision_norm.y;
       if (speed > 0) {
          const impulse = (2 * speed) / (state.ball.radius + player.radius - 8);
-         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 1.2;
-         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 1.2;
+         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 0.8;
+         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 0.8;
          player.xv += impulse * state.ball.radius * v_collision_norm.x * 0.8;
          player.yv += impulse * state.ball.radius * v_collision_norm.y * 0.8;
       }

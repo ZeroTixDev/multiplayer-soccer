@@ -53,6 +53,7 @@ function parseState(data, players) {
          team,
          input: { right: false, up: false, left: false, down: false, shift: false },
          shift: false,
+         shiftTimer: 0,
       };
    }
    // if (data.scores) {
