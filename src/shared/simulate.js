@@ -179,7 +179,7 @@ module.exports = function simulate(oldState, inputs) {
    for (const goal of Object.values(state.goals)) {
       if (intersectRectCircle(goal, state.ball)) {
          detectedInside = true;
-         const magnitude =  Math.round(Math.sqrt(state.ball.xv * state.ball.xv + state.ball.yv * state.ball.yv));
+         const magnitude =  Math.round(Math.sqrt(state.ball.xv * state.ball.xv + state.ball.yv * state.ball.yv) / 10);
          if (!state.winning) {
             state.winSpeed = magnitude;
             state.winning = true;
