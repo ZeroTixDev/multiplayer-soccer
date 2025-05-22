@@ -129,12 +129,12 @@ function drawBound(game, { ctx }) {
    ctx.strokeStyle = '#1f2229';//'#145e10';
    let amount = 2;
    ctx.globalAlpha = 0.1;
-   // for (let y = 0; y < height; y += 140) {
-   //    for (let x = 0; x < width; x += 140) {
-   //       const pos = offset(x, y, game, ctx.canvas);
-   //       ctx.strokeRect(pos.x, pos.y, 140, 140);
-   //    }
-   // }
+   for (let y = 0; y < height; y += 70) {
+      for (let x = 0; x < width; x += 70) {
+         const pos = offset(x, y, game, ctx.canvas);
+         ctx.strokeRect(pos.x, pos.y, 70, 70);
+      }
+   }
    ctx.globalAlpha = 1;
    for (let y = 0; y < height; y += height / amount) {
       for (let x = 0; x < width; x += width / amount) {
@@ -161,7 +161,7 @@ function drawPlayers(game, { ctx }) {
       ctx.fillStyle = 'black';
       ctx.lineWidth = 10;
       if (player.shift) {
-         ctx.shadowBlur = 10;
+         ctx.shadowBlur = 30;
       }
       ctx.shadowColor = ctx.strokeStyle;
       const pos = offset(player.x, player.y, game, ctx.canvas);

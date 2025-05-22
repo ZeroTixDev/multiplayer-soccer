@@ -59,8 +59,8 @@ function simulatePlayer(player, state, Input, delta) {
    if (mult == 0 && player.shift) {
       player.shiftTimer++;
       if (player.shiftTimer < 60) {
-         player.xv *= 1.007;
-         player.yv *= 1.007;
+         player.xv *= 1.01;
+         player.yv *= 1.01;
       }
    }
 
