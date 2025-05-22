@@ -66,19 +66,19 @@ function simulatePlayer(player, state, Input, delta) {
 
    if (player.x + player.radius > state.bound.width + state.bound.x) {
       player.x = state.bound.width + state.bound.x - player.radius;
-      player.xv *= -0.5;
+      player.xv *= -0.8;
    }
    if (player.x - player.radius < state.bound.x) {
       player.x = state.bound.x + player.radius;
-      player.xv *= -0.5;
+      player.xv *= -0.8;
    }
    if (player.y + player.radius > state.bound.y + state.bound.height) {
       player.y = state.bound.y + state.bound.height - player.radius;
-      player.yv *= -0.5;
+      player.yv *= -0.8;
    }
    if (player.y - player.radius < state.bound.y) {
       player.y = state.bound.y + player.radius;
-      player.yv *= -0.5;
+      player.yv *= -0.8;
    }
 
    const distX = player.x - state.ball.x;
