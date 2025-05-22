@@ -71,6 +71,10 @@ function simulatePlayer(player, state, Input, delta) {
          player.shiftTimer = 0;
       }
    } else {
+      if (player.shift) {
+         player.xv = 0;
+         player.yv = 0;
+      }
       player.shift = false;
       player.shiftTimer--;
    }
