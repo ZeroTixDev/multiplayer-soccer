@@ -2,6 +2,7 @@
 
 const round = (value) => Math.round(value);
 window.scaling = 1;
+window.toScale = 1;
 // const {  } = require('../../shared/constants.js');
 
 // let phraseText = '';
@@ -26,11 +27,25 @@ module.exports = function Render({ game, ctx, canvas }) {
    // if (scaling > 1) {
    //    scaling = 1;
    // }
+   //  || Math.abs(game.renderState.players[selfId].y - game.renderState.ball.y)*(1/scaling) < 250
+
+   if (game === undefined) return;
+
+   if (game.state() != undefined && game.renderState != undefined && game?.renderState?.players[selfId] != undefined) {
+      // scaling -= 0.01;
+      toScale = 1;
+      while (Math.abs(gameState.renderState.players[selfId].x - gameState.renderState.ball.x)*(toScale) > (800-100 - (gameState.renderState.ball.radius) - (gameState.renderState.players[selfId].radius))) {
+            toScale -= 0.005;
+      }
+      while (Math.abs(gameState.renderState.players[selfId].y - gameState.renderState.ball.y)*(toScale) > (450-100 - (gameState.renderState.ball.radius) - (gameState.renderState.players[selfId].radius))) {
+         toScale -= 0.005;
+      }
+      window.scaling = window.scaling + (window.toScale - window.scaling) * 0.05;
+   }
 
    ctx.translate(canvas.width /2 , canvas.height / 2);
    ctx.scale(scaling, scaling)
    ctx.translate(-canvas.width /2 , -canvas.height / 2);
-   if (game === undefined) return;
    // if (game.countdown !== undefined || game.countdownAlpha + 0.5 <= 0) {
    //    ctx.fillStyle = 'white';
    //    ctx.font = `65px Lexend`;
@@ -69,11 +84,13 @@ module.exports = function Render({ game, ctx, canvas }) {
 
 function offset(x, y, game, canvas) {
    const player = game.renderState.players[selfId];
+   const ball = game.renderState.ball;
    return {
-      x: Math.round(x - player.x + canvas.width / 2),
-      y: Math.round(y - player.y + canvas.height / 2),
+      x: Math.round(x - (player.x + (ball.x - player.x) * 0.5) + canvas.width / 2),
+      y: Math.round(y - (player.y + (ball.y - player.y) * 0.5) + canvas.height / 2),
    };
 }
+
 
 function drawGoals(game, { ctx }) {
    for (const goal of Object.values(game.state().goals)) {
@@ -112,12 +129,12 @@ function drawBound(game, { ctx }) {
    ctx.strokeStyle = '#1f2229';//'#145e10';
    let amount = 2;
    ctx.globalAlpha = 0.1;
-   for (let y = 0; y < height; y += 70) {
-      for (let x = 0; x < width; x += 70) {
-         const pos = offset(x, y, game, ctx.canvas);
-         ctx.strokeRect(pos.x, pos.y, 70, 70);
-      }
-   }
+   // for (let y = 0; y < height; y += 140) {
+   //    for (let x = 0; x < width; x += 140) {
+   //       const pos = offset(x, y, game, ctx.canvas);
+   //       ctx.strokeRect(pos.x, pos.y, 140, 140);
+   //    }
+   // }
    ctx.globalAlpha = 1;
    for (let y = 0; y < height; y += height / amount) {
       for (let x = 0; x < width; x += width / amount) {
@@ -144,22 +161,37 @@ function drawPlayers(game, { ctx }) {
       ctx.fillStyle = 'black';
       ctx.lineWidth = 10;
       if (player.shift) {
-         ctx.shadowBlur = 15;
+         ctx.shadowBlur = 10;
       }
       ctx.shadowColor = ctx.strokeStyle;
       const pos = offset(player.x, player.y, game, ctx.canvas);
       ctx.arc(Math.round(pos.x), Math.round(pos.y), player.radius -ctx.lineWidth /2, 0, Math.PI * 2);
       ctx.stroke();
       ctx.fill();
-      ctx.shadowBlur = 0;
+      // ctx.shadowBlur = 0;
       ctx.fillStyle = 'white';////''black`';
       ctx.font = `${20 + (Math.round(player.radius) + 0.5) / 25 }px Inter`;
       ctx.textAlign = 'center';
       ctx.textBaseline = 'middle';
       ctx.fillText(player.name, Math.round(pos.x), Math.round(pos.y + player.radius + player.radius / 3 + player.radius / 8));
+      ctx.shadowBlur = 0;
+      if (!player.shift) {
+         // ctx.globalAlpha = 0.5;
+         ctx.beginPath();
+         ctx.strokeStyle = player.team === 'red' ? '#eb2d2d' : '#4157ba';
+         // ctx.strokeStyle = '#7303fc';
+         ctx.lineWidth = 5;
+         // ctx.arc(Math.round(pos.x), Math.round(pos.y), player.radius/2- ctx.lineWidth/2, 0, (Math.PI * 2) );
+         // ctx.stroke();
+         ctx.globalAlpha = 1;
+         ctx.beginPath();
+         ctx.arc(Math.round(pos.x), Math.round(pos.y), player.radius/2- ctx.lineWidth/2, 0, (Math.PI * 2) * (1 - (player.shiftTimer/(120*5))) );
+         ctx.stroke();
+      }
 
       if (window.debugMode) {
          ctx.fillStyle = 'white';
+         ctx.font = `${10}px Inter`
          ctx.fillText(player.ticksBehind, Math.round(pos.x), Math.round(pos.y));
       }
    }

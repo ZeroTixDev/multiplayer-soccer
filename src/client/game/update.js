@@ -102,6 +102,7 @@ module.exports = function Update(game) {
       player.x = lerp(player.x, realPlayer.x, lerpTime);
       player.y = lerp(player.y, realPlayer.y, lerpTime);
       player.shift = realPlayer.shift;
+      player.shiftTimer = realPlayer.shiftTimer;
    }
 
    return { game, ctx, canvas };

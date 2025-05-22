@@ -65,7 +65,7 @@ function trackKeys(event) {
    if (event.repeat) return;
    const control = controls[event.code];
    if (control === undefined) return;
-   if (control.movement) {
+    if (control.movement) {
       console.log(control.name, event.code)
       window.currentInput[control.name] = event.type === 'keydown';
    }
@@ -309,7 +309,7 @@ function serverMessage(msg, t) {
       }
       ref.playerCount.innerText = `${roomData.playerCount} / ${roomData.maxPlayers}`;
       if (game.readyCount === game.maxPlayers || Object.keys(game.players).length === game.readyCount) {
-         ref.playersNotReady.innerText = 'nothing';
+         ref.playersNotReady.innerText = 'GAME IN PROGRESS';
       } else {
          const notReadyNames = [];
          for (const player of Object.values(game.players)) {

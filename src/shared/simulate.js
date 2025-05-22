@@ -28,11 +28,11 @@ function intersectRectCircle(rect, circle) {
    return xCornerDistSq + yCornerDistSq <= maxCornerDistSq;
 }
 
-const knock = 250;
+const knock = 500;
 // const accel = 1100;
 // const friction = 0.9;
-const accel = 2000;
-const friction = 0.85;
+const accel = 1600;
+const friction = 0.88;
 function simulatePlayer(player, state, Input, delta) {
    // delta = delta * 1.5;
    const input = Input === undefined ? player.input : Input;
@@ -56,26 +56,36 @@ function simulatePlayer(player, state, Input, delta) {
    player.xv *= Math.pow(friction, delta * 15 * mult);
    player.yv *= Math.pow(friction, delta * 15 * mult);
 
-   if (mult == 0) {
+   if (mult == 0 && player.shift) {
       player.shiftTimer++;
       if (player.shiftTimer < 60) {
-         player.xv *= 1.015;
-         player.yv *= 1.015;
+         player.xv *= 1.007;
+         player.yv *= 1.007;
       }
    }
 
    // console.log(input);
    if (input.shift) {
-      if (!player.shift) {
+      if (!player.shift && player.shiftTimer <= 0 && 
+         !player.shiftLock
+      ) {
          player.shift = true;
          player.shiftTimer = 0;
+         player.shiftLock = true;
       }
-   } else {
-      if (player.shift) {
-         player.xv = 0;
-         player.yv = 0;
-      }
+   } 
+   if (!input.shift) {
+      player.shiftLock = false;
+   }
+   
+   if (player.shiftTimer > 60 && player.shift) {
       player.shift = false;
+      player.shiftTimer = 120*5;
+      // player.xv = 0;
+      // player.yv = 0;
+   }
+
+   if (!player.shift) {
       player.shiftTimer--;
    }
    // if (player.shift) {
@@ -88,19 +98,19 @@ function simulatePlayer(player, state, Input, delta) {
 
    if (player.x + player.radius > state.bound.width + state.bound.x) {
       player.x = state.bound.width + state.bound.x - player.radius;
-      player.xv *= -0.75;
+      player.xv *= 0;
    }
    if (player.x - player.radius < state.bound.x) {
       player.x = state.bound.x + player.radius;
-      player.xv *= -0.75;
+      player.xv *= 0;
    }
    if (player.y + player.radius > state.bound.y + state.bound.height) {
       player.y = state.bound.y + state.bound.height - player.radius;
-      player.yv *= -0.75;
+      player.yv *= 0;
    }
    if (player.y - player.radius < state.bound.y) {
       player.y = state.bound.y + player.radius;
-      player.yv *= -0.75;
+      player.yv *= 0;
    }
 
    const distX = player.x - state.ball.x;
@@ -122,10 +132,10 @@ function simulatePlayer(player, state, Input, delta) {
       const speed = v_relative_velocity.x * v_collision_norm.x + v_relative_velocity.y * v_collision_norm.y;
       if (speed > 0) {
          const impulse = (2 * speed) / (state.ball.radius + player.radius - 8);
-         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 0.8;
-         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 0.8;
-         player.xv += impulse * state.ball.radius * v_collision_norm.x * 0.8;
-         player.yv += impulse * state.ball.radius * v_collision_norm.y * 0.8;
+         state.ball.xv -= impulse * player.radius * v_collision_norm.x * 1.3;
+         state.ball.yv -= impulse * player.radius * v_collision_norm.y * 1.3;
+         player.xv += impulse * state.ball.radius * v_collision_norm.x * 0.7;
+         player.yv += impulse * state.ball.radius * v_collision_norm.y * 0.7;
       }
    }
    return player;
