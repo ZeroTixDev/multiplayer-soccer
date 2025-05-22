@@ -54,8 +54,8 @@ function simulatePlayer(player, state, Input, delta) {
    player.yv *= Math.pow(friction, delta * 15 * mult);
 
    if (mult == 0) {
-      player.xv *= 1.2 * delta;
-      player.yv *= 1.2 * delta;
+      player.xv *= 1.001;
+      player.yv *= 1.001;
    }
 
    // console.log(input);
