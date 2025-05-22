@@ -249,7 +249,7 @@ module.exports = class Room {
                player.ready = false;
             }
             this.wins[team] += 1;
-            this.talk('SERVER', `${team === 'blue' ? 'Red' : 'Blue'} team has won the game! (Red ${this.wins['blue']} - Blue ${this.wins['red']})`);
+            this.talk('SERVER', `${team === 'blue' ? 'Red' : 'Blue'} team has won the game! (Red ${this.wins['blue']} - Blue ${this.wins['red']}) [${this.states[this.tick + 1].winSpeed} e/x]`);
             // const scores = this.states[this.tick + 1].scores;
             // for (const id of Object.keys(scores)) {
             //    const score = scores[id];

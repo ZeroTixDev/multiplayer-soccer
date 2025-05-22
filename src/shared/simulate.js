@@ -174,8 +174,16 @@ module.exports = function simulate(oldState, inputs) {
    state.ball.y += state.ball.yv * delta;
    state.ball.xv *= Math.pow(0.99, delta * 30);
    state.ball.yv *= Math.pow(0.99, delta * 30);
+
+   let detectedInside = false;
    for (const goal of Object.values(state.goals)) {
       if (intersectRectCircle(goal, state.ball)) {
+         detectedInside = true;
+         const magnitude =  Math.round(Math.sqrt(state.ball.xv * state.ball.xv + state.ball.yv * state.ball.yv)*100);
+         if (!state.winning) {
+            state.winSpeed = magnitude;
+            state.winning = true;
+         }
          // state.won = goal.team;
          state.ball.xv *= Math.pow(0.8, delta * 30);
          state.ball.yv *= Math.pow(0.8, delta * 30);
@@ -185,6 +193,10 @@ module.exports = function simulate(oldState, inputs) {
          // break;
          return state;
       }
+   }
+
+   if (state.winning && !detectedInside) {
+      state.winning = false;
    }
    if (!state.won) {
       if (state.ball.x + state.ball.radius > state.bound.width + state.bound.x) {
