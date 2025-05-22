@@ -50,7 +50,7 @@ function simulatePlayer(player, state, Input, delta) {
    if (input.right) {
       player.xv += accel * delta * input.right * mult;
    }
-   if (player.shiftTimer > 120) {
+   if (player.shiftTimer > 60) {
       mult = 1;
    }
    player.xv *= Math.pow(friction, delta * 15 * mult);
@@ -58,9 +58,9 @@ function simulatePlayer(player, state, Input, delta) {
 
    if (mult == 0) {
       player.shiftTimer++;
-      if (player.shiftTimer < 120) {
-         player.xv *= 1.01;
-         player.yv *= 1.01;
+      if (player.shiftTimer < 60) {
+         player.xv *= 1.015;
+         player.yv *= 1.015;
       }
    }
 
