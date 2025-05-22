@@ -37,48 +37,56 @@ function simulatePlayer(player, state, Input, delta) {
    // delta = delta * 1.5;
    const input = Input === undefined ? player.input : Input;
    player.input = { up: input.up, left: input.left, down: input.down, right: input.right, shift: input.shift };
-   if (input.up) {
-      player.yv -= accel * delta * input.up;
+   if (input.shift) {
+      player.shift = true;
+   } else {
+      if (player.shift) {
+         player.xv = 0;
+         player.yv = 0;
+      }
+      player.shift = false;
    }
-   if (input.down) {
-      player.yv += accel * delta * input.down;
-   }
-   if (input.left) {
-      player.xv -= accel * delta * input.left;
-   }
-   if (input.right) {
-      player.xv += accel * delta * input.right;
+   if (!input.shift) {
+      if (input.up) {
+         player.yv -= accel * delta * input.up;
+      }
+      if (input.down) {
+         player.yv += accel * delta * input.down;
+      }
+      if (input.left) {
+         player.xv -= accel * delta * input.left;
+      }
+      if (input.right) {
+         player.xv += accel * delta * input.right;
+      }
    }
    player.xv *= Math.pow(friction, delta * 15);
    player.yv *= Math.pow(friction, delta * 15);
    // console.log(input);
-   if (input.shift) {
-      player.shift = true;
-   } else {
-      player.shift = false;
-   }
-   if (player.shift) {
-      player.xv *= Math.pow(friction, delta * 20);
-      player.yv *= Math.pow(friction, delta * 20);
-   }
+   
+   // if (player.shift) {
+   //    // player.xv *= Math.pow(friction, delta * 20);
+   //    // player.yv *= Math.pow(friction, delta * 20);
+   // }
+   
    player.x += player.xv * delta;
    player.y += player.yv * delta;
 
    if (player.x + player.radius > state.bound.width + state.bound.x) {
       player.x = state.bound.width + state.bound.x - player.radius;
-      player.xv *= -0.8;
+      player.xv *= -0.75;
    }
    if (player.x - player.radius < state.bound.x) {
       player.x = state.bound.x + player.radius;
-      player.xv *= -0.8;
+      player.xv *= -0.75;
    }
    if (player.y + player.radius > state.bound.y + state.bound.height) {
       player.y = state.bound.y + state.bound.height - player.radius;
-      player.yv *= -0.8;
+      player.yv *= -0.75;
    }
    if (player.y - player.radius < state.bound.y) {
       player.y = state.bound.y + player.radius;
-      player.yv *= -0.8;
+      player.yv *= -0.75;
    }
 
    const distX = player.x - state.ball.x;
