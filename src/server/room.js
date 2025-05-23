@@ -99,7 +99,8 @@ module.exports = class Room {
       this.wins = {
          red: 0,
          blue: 0,
-      }
+      };
+      this.wonMatch = false;
    }
    get playerCount() {
       return Object.keys(this.players).length;
@@ -166,6 +167,7 @@ module.exports = class Room {
          !this.toDelete
       ) {
          this.state = 'game';
+         this.wonMatch = false;
          this.countdown = COUNTDOWN;
          this.startTime = global.present();
          this.tick = 0;
@@ -248,8 +250,11 @@ module.exports = class Room {
             for (const player of Object.values(this.players)) {
                player.ready = false;
             }
-            this.wins[team] += 1;
-            this.talk('SERVER', `${team === 'blue' ? 'Red' : 'Blue'} team has won the game! (Red ${this.wins['blue']} - Blue ${this.wins['red']}) (Ball - ${this.states[this.tick + 1].winSpeed})`);
+            if (!this.wonMatch) {
+               this.wonMatch = true;
+               this.wins[team] += 1;
+               this.talk('SERVER', `${team === 'blue' ? 'Red' : 'Blue'} team has won the game! (Red ${this.wins['blue']} - Blue ${this.wins['red']}) (Ball - ${this.states[this.tick + 1].winSpeed})`);
+            }
             // const scores = this.states[this.tick + 1].scores;
             // for (const id of Object.keys(scores)) {
             //    const score = scores[id];
