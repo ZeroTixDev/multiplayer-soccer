@@ -11,7 +11,7 @@ module.exports = {
    BALL_MAX_SPEED: 1000,
    // INPUT_DECAY: 0.97,
    POINTS_TO_WIN: 3,
-   SMOOTHING_RATE: 30,
+   SMOOTHING_RATE: 10,
    phrases: {
       1: 'Wow!',
       2: 'Close one!',
